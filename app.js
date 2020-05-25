@@ -4,7 +4,8 @@ new Vue ({
         playerHP: 100,
         playerMP: 50,
         monsterHP: 100,
-        gameIsRunning: false
+        gameIsRunning: false,
+        turns: []
     },
     methods: {
         startGame: function() {
@@ -12,10 +13,16 @@ new Vue ({
             this.playerHP = 100;
             this.playerMP = 50;
             this.monsterHP = 100;
+            this.turns = [];
         },
         attack: function() {
             //for player
-            this.monsterHP -= this.calculateDamage(3,10);
+            var damage = this.calculateDamage(3,10);
+            this.monsterHP -= damage;
+            this.turns.unshift({
+                isplayer: true,
+                text: 'Player hits Monster for' + damage
+            });
             if (this.checkWin()) {
                 return;
             }
@@ -23,10 +30,14 @@ new Vue ({
             this.monsterAttack();
         },
         specialAttack: function() {
+            var damage = this.calculateDamage(10,20);
             if (this.isEnoughMp) {
                 this.mpUsed();
-                this.monsterHP -= this.calculateDamage(10,20);
-
+                this.monsterHP -= damage;
+                this.turns.unshift({
+                    isplayer: true,
+                    text: 'Player hits Monster with Crit for' + damage
+                });
                 this.monsterAttack();
             }
             if (this.checkWin()) {
@@ -43,6 +54,10 @@ new Vue ({
                 if (this.playerHP > 100) {
                     this.playerHP = 100;
                 }
+                this.turns.unshift({
+                    isplayer: true,
+                    text: 'Player heals for 20'
+                });
                 this.monsterAttack();
             }
         },
@@ -61,8 +76,13 @@ new Vue ({
             this.playerMP-=10;
         },
         monsterAttack: function() {
-            this.playerHP -= this.calculateDamage(5,12);
-            this.checkWin();   
+            var damage = this.calculateDamage(5,12);
+            this.playerHP -= damage;
+            this.checkWin();
+            this.turns.unshift({
+                isplayer: false,
+                text: 'Monster hits Player for' + damage
+            });
         },
         calculateDamage: function(min, max) {
             return Math.max(Math.floor(Math.random() * max) + 1, min);
