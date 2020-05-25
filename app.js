@@ -20,7 +20,7 @@ new Vue ({
             var damage = this.calculateDamage(3,10);
             this.monsterHP -= damage;
             this.turns.unshift({
-                isplayer: true,
+                isPlayer: true,
                 text: 'Player hits Monster for' + damage
             });
             if (this.checkWin()) {
@@ -35,19 +35,19 @@ new Vue ({
                 this.mpUsed();
                 this.monsterHP -= damage;
                 this.turns.unshift({
-                    isplayer: true,
+                    isPlayer: true,
                     text: 'Player hits Monster with Crit for' + damage
                 });
+                if (this.checkWin()) {
+                    return;
+                }  
                 this.monsterAttack();
-            }
-            if (this.checkWin()) {
-                return;
-            }      
+            }    
         },
         heal: function() {
             if (this.isEnoughMp) {
                 if (this.playerHP == 100){
-                    alert('Your HP is Full.Can not be heal.');
+                    alert('Your HP is Full.');
                 }
                 this.playerHP += 20;
                 this.mpUsed();
@@ -55,7 +55,7 @@ new Vue ({
                     this.playerHP = 100;
                 }
                 this.turns.unshift({
-                    isplayer: true,
+                    isPlayer: true,
                     text: 'Player heals for 20'
                 });
                 this.monsterAttack();
@@ -80,7 +80,7 @@ new Vue ({
             this.playerHP -= damage;
             this.checkWin();
             this.turns.unshift({
-                isplayer: false,
+                isPlayer: false,
                 text: 'Monster hits Player for' + damage
             });
         },
