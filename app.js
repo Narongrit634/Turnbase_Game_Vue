@@ -2,7 +2,7 @@ new Vue ({
     el: '#app',
     data: {
         playerHP: 100,
-        playerMP: 100,
+        playerMP: 50,
         monsterHP: 100,
         gameIsRunning: false
     },
@@ -16,22 +16,53 @@ new Vue ({
         attack: function() {
             //for player
             this.monsterHP -= this.calculateDamage(3,10);
-
             if (this.checkWin()) {
                 return;
             }
             //for monster
-            this.playerHP -= this.calculateDamage(5,12);
-            this.checkWin();
+            this.monsterAttack();
         },
         specialAttack: function() {
+            if (this.isEnoughMp) {
+                this.mpUsed();
+                this.monsterHP -= this.calculateDamage(10,20);
 
+                this.monsterAttack();
+            }
+            if (this.checkWin()) {
+                return;
+            }      
         },
         heal: function() {
-
+            if (this.isEnoughMp) {
+                if (this.playerHP == 100){
+                    alert('Your HP is Full.Can not be heal.');
+                }
+                this.playerHP += 20;
+                this.mpUsed();
+                if (this.playerHP > 100) {
+                    this.playerHP = 100;
+                }
+                this.monsterAttack();
+            }
         },
         giveUp: function() {
-
+            alert('You gave up,YOU LOSE!!')
+            this.gameIsRunning = false;
+        },
+        isEnoughMp: function() {
+            if (playerMP < 10) {
+                alert('Your MP is not enough to cast spell.')
+                return true;
+            }
+            return false;
+        },
+        mpUsed: function() {
+            this.playerMP-=10;
+        },
+        monsterAttack: function() {
+            this.playerHP -= this.calculateDamage(5,12);
+            this.checkWin();   
         },
         calculateDamage: function(min, max) {
             return Math.max(Math.floor(Math.random() * max) + 1, min);
