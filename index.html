@@ -10,32 +10,33 @@
 <div id="app">
     <section class="row">
         <div class="small-6 columns">
-            <h1 class="text-center">PLAYER</h1>
+            <h1 class="text-center">YOU</h1>
             <div class="healthbar">
-                <div class="healthbar text-center" style="background-color: green; margin: 0; color: white;" :style="{width: playerHP + '%'}">
-                    {{ playerHP }}
-                </div>
-                <br>
-                <div class="healthbar text-center" style="background-color: blue; margin: 0; color: white;" :style="{width: playerMP + '%'}">
-                    {{ playerMP }}
+                <div
+                        class="healthbar text-center"
+                        style="background-color: green; margin: 0; color: white;"
+                        :style="{width: playerHealth + '%'}">
+                    {{ playerHealth }}
                 </div>
             </div>
         </div>
         <div class="small-6 columns">
             <h1 class="text-center">MONSTER</h1>
             <div class="healthbar">
-                <div class="healthbar text-center" style="background-color: green; margin: 0; color: white;" :style="{width: monsterHP + '%'}">
-                    {{ monsterHP }}
+                <div
+                        class="healthbar text-center"
+                        style="background-color: green; margin: 0; color: white;"
+                        :style="{width: monsterHealth + '%'}">
+                    {{ monsterHealth }}
                 </div>
             </div>
         </div>
     </section>
-    <section class="row controls" v-if="!gameIsrunning">
+    <section class="row controls" v-if="!gameIsRunning">
         <div class="small-12 columns">
             <button id="start-game" @click="startGame">START NEW GAME</button>
         </div>
     </section>
-    <hr>
     <section class="row controls" v-else>
         <div class="small-12 columns">
             <button id="attack" @click="attack">ATTACK</button>
@@ -47,8 +48,9 @@
     <section class="row log" v-if="turns.length > 0">
         <div class="small-12 columns">
             <ul>
-                <li v-for="turn in turns" :class="{'player-turn': turn.isPlayer, 'monster-turn': !turn.isPlayer}">
-                    {{ turn.text }}
+                <li v-for="(turn, index) in turns"
+                    :class="{'player-turn': turn.isPlayer, 'monster-turn': !turn.isPlayer}">
+                   Turn:{{index}} -> {{ turn.text }}
                 </li>
             </ul>
         </div>
